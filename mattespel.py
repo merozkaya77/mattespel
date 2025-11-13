@@ -10,14 +10,14 @@ st.set_page_config(
     layout="centered"
 )
 
-# Initiera spelstatus
+# Initiera spelstatus med EKLATTA värden (-5 till 5)
 if 'spel' not in st.session_state:
     st.session_state.spel = {
         'spelare1': 0,
         'spelare2': 0, 
         'nuvarande': 1,
-        'hemlig_k': random.randint(-10, 10),
-        'hemlig_m': random.randint(-10, 10),
+        'hemlig_k': random.randint(-5, 5),
+        'hemlig_m': random.randint(-5, 5),
         'aktivt': True
     }
 
@@ -52,8 +52,8 @@ if st.button("🔄 Nollställ Spelet", use_container_width=True):
     st.session_state.spel['spelare1'] = 0
     st.session_state.spel['spelare2'] = 0  
     st.session_state.spel['nuvarande'] = 1
-    st.session_state.spel['hemlig_k'] = random.randint(-10, 10)
-    st.session_state.spel['hemlig_m'] = random.randint(-10, 10)
+    st.session_state.spel['hemlig_k'] = random.randint(-5, 5)
+    st.session_state.spel['hemlig_m'] = random.randint(-5, 5)
     st.session_state.spel['aktivt'] = True
     st.rerun()
 
@@ -85,13 +85,13 @@ if st.session_state.spel['aktivt']:
     
     st.pyplot(fig)
 
-    # Gissningssektion
+    # Gissningssektion med ENKLARE gränser (-5 till 5)
     st.subheader("🎯 Din gissning")
     col1, col2 = st.columns(2)
     with col1:
-        k_giss = st.slider("Lutning k", -10, 10, 0, key="k_slider")
+        k_giss = st.slider("Lutning k", -5, 5, 0, key="k_slider")
     with col2:
-        m_giss = st.slider("y-skärning m", -10, 10, 0, key="m_slider")
+        m_giss = st.slider("y-skärning m", -5, 5, 0, key="m_slider")
 
     st.info(f"**Du gissar:** y = {k_giss}x + {m_giss}")
 
@@ -106,13 +106,16 @@ if st.session_state.spel['aktivt']:
                 st.session_state.spel['spelare2'] += 1
                 st.success(f"🎉 Spelare 2 gissade RÄTT och fick 1 poäng! Totala poäng: {st.session_state.spel['spelare2']}")
             
-            # ALLTID skapa NY LINJE efter gissning
-            st.session_state.spel['hemlig_k'] = random.randint(-10, 10)
-            st.session_state.spel['hemlig_m'] = random.randint(-10, 10)
+            # ALLTID skapa NY LINJE efter gissning (med ENKLA värden)
+            st.session_state.spel['hemlig_k'] = random.randint(-5, 5)
+            st.session_state.spel['hemlig_m'] = random.randint(-5, 5)
             
         else:
             # FEL SVAR - ingen poäng
             st.error(f"❌ Spelare {st.session_state.spel['nuvarande']} gissade fel! Ingen poäng.")
+            # Ändå skapa ny linje för nästa spelare
+            st.session_state.spel['hemlig_k'] = random.randint(-5, 5)
+            st.session_state.spel['hemlig_m'] = random.randint(-5, 5)
         
         # ALLTID BYT SPELARE efter gissning (oavsett rätt/fel)
         st.session_state.spel['nuvarande'] = 3 - st.session_state.spel['nuvarande']
@@ -139,12 +142,14 @@ with st.expander("📖 Spelinstruktioner"):
     
     **📊 Grafen:**
     - Varje ruta = 1 enhet
-    - k: -10 till 10
-    - m: -10 till 10
+    - k: -5 till 5 (enkla värden)
+    - m: -5 till 5 (enkla värden)
     
     **💡 Tips:**
-    - **m** = var linjen skär y-axeln
+    - **m** = var linjen skär y-axeln (när x=0)
     - **k** = lutning (positiv = uppåt, negativ = nedåt)
+    - **k = 0** = horisontell linje
+    - **m = 0** = linjen går genom origo
     """)
 
 st.markdown("---")
