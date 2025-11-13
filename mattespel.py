@@ -38,11 +38,11 @@ with col3:
 # Vinstmeddelande
 if st.session_state.spel['spelare1'] >= 10:
     st.balloons()
-    st.success("🎊 🎊 SPELARE 1 VINNER SPELE T! 🎊 🎊")
+    st.success("🎊 🎊 SPELARE 1 VINNER SPELET! 🎊 🎊")
     st.session_state.spel['aktivt'] = False
 elif st.session_state.spel['spelare2'] >= 10:
     st.balloons()  
-    st.success("🎊 🎊 SPELARE 2 VINNER SPELE T! 🎊 🎊")
+    st.success("🎊 🎊 SPELARE 2 VINNER SPELET! 🎊 🎊")
     st.session_state.spel['aktivt'] = False
 
 st.markdown("---")
